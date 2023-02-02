@@ -9,10 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class MsprApplication {
 
-	@GetMapping("/")
-	public String main(){
-		return "Hello world";
-	}
+
 
 	public static void main(String[] args) {
 		SpringApplication.run(MsprApplication.class, args);
