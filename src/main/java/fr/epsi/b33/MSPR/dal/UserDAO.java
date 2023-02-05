@@ -10,6 +10,5 @@ import java.util.List;
 
 @RepositoryRestResource(path = "users", collectionResourceRel = "users")
 public interface UserDAO extends CrudRepository<User, Integer> {
-    @RestResource(path = "by-pseudo")
-    List<User> findByPseudoContaining(@Param("pseudo") String pseudo );
+
 }

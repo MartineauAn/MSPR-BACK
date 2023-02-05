@@ -1,11 +1,12 @@
 package fr.epsi.b33.MSPR.bo;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Set;
 
 @Entity
 @Table(name = "specification")
-public class Specification {
+public class Specification implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

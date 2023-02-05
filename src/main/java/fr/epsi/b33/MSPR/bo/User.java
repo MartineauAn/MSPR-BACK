@@ -13,11 +13,7 @@ public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
-    @Column(unique = true)
-    private String pseudo;
-
-    @Column(name = "lastname")
+    @Column
     private String lastname;
     @Column
     private String firstname;

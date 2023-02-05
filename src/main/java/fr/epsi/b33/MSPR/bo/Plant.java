@@ -1,11 +1,14 @@
 package fr.epsi.b33.MSPR.bo;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.sql.Blob;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "plant")
-public class Plant {
+public class Plant implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -13,12 +16,12 @@ public class Plant {
     @Column(nullable = false)
     private String libelle;
 
-    @Column(nullable = false)
+    @Column
     private String type;
 
-    @Lob
-    @Column(nullable = false)
-    private Blob photo;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "photo_id")
+    private Asset photo;
     @Column
     private String advice;
 
@@ -26,14 +29,22 @@ public class Plant {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @OneToMany(mappedBy = "plant", fetch = FetchType.LAZY)
+    private Set<PlantPost> plantPosts;
+
     public Plant() {
     }
 
-    public Plant(String libelle, String type, Blob photo, String advice) {
+    public Plant(String libelle, String type, Asset photo, String advice) {
         this.libelle = libelle;
         this.type = type;
         this.photo = photo;
         this.advice = advice;
+        this.plantPosts = new HashSet<>();
+    }
+
+    public Plant (String libelle){
+        this.libelle = libelle;
     }
 
     public Integer getId() {
@@ -60,11 +71,11 @@ public class Plant {
         this.type = type;
     }
 
-    public Blob getPhoto() {
+    public Asset getPhoto() {
         return photo;
     }
 
-    public void setPhoto(Blob photo) {
+    public void setPhoto(Asset photo) {
         this.photo = photo;
     }
 
@@ -82,5 +93,13 @@ public class Plant {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Set<PlantPost> getPlantPosts() {
+        return plantPosts;
+    }
+
+    public void setPlantPosts(Set<PlantPost> plantPosts) {
+        this.plantPosts = plantPosts;
     }
 }

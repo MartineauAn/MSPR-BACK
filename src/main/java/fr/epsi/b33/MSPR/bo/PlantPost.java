@@ -1,6 +1,7 @@
 package fr.epsi.b33.MSPR.bo;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.sql.Blob;
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -9,7 +10,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "plant_post")
-public class PlantPost {
+public class PlantPost implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -22,9 +23,9 @@ public class PlantPost {
     @Column(nullable = false)
     private LocalDateTime end_date;
 
-    @Lob
-    @Column(nullable = false)
-    private Blob photo;
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "photo_id")
+    private Asset photo;
 
     @Column(nullable = false)
     private String title;
@@ -44,21 +45,24 @@ public class PlantPost {
     @Column
     private String post_code;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
     @OneToMany(mappedBy = "plantPost")
     private Set<Specification> specifications;
 
+    @ManyToOne
+    @JoinColumn(name = "plant_id")
+    private Plant plant;
+
     public PlantPost() {
     }
 
-    public PlantPost(Date publicationDate, LocalDateTime start_date, LocalDateTime end_date, Blob photo, String title, String description, String surname, String city, String address, String post_code) {
+    public PlantPost(Date publicationDate, LocalDateTime start_date, LocalDateTime end_date, String title, String description, String surname, String city, String address, String post_code) {
         this.publicationDate = publicationDate;
         this.start_date = start_date;
         this.end_date = end_date;
-        this.photo = photo;
         this.title = title;
         this.description = description;
         this.surname = surname;
@@ -100,11 +104,11 @@ public class PlantPost {
         this.end_date = end_date;
     }
 
-    public Blob getPhoto() {
+    public Asset getPhoto() {
         return photo;
     }
 
-    public void setPhoto(Blob photo) {
+    public void setPhoto(Asset photo) {
         this.photo = photo;
     }
 
@@ -162,6 +166,14 @@ public class PlantPost {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Plant getPlant() {
+        return plant;
+    }
+
+    public void setPlant(Plant plant) {
+        this.plant = plant;
     }
 
     public Set<Specification> getSpecifications() {
