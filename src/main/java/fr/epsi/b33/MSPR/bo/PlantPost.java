@@ -1,6 +1,10 @@
 package fr.epsi.b33.MSPR.bo;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonView;
+
 import javax.persistence.*;
+import javax.swing.text.View;
 import java.io.Serializable;
 import java.sql.Blob;
 import java.time.LocalDateTime;
@@ -23,9 +27,12 @@ public class PlantPost implements Serializable {
     @Column(nullable = false)
     private LocalDateTime end_date;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "photo_id")
     private Asset photo;
+
+    @Transient
+    private String photo_id;
 
     @Column(nullable = false)
     private String title;
@@ -45,14 +52,17 @@ public class PlantPost implements Serializable {
     @Column
     private String post_code;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "plantPost")
+    @Transient
+    private String username;
+
+    @OneToMany(mappedBy = "plantPost",cascade = CascadeType.ALL)
     private Set<Specification> specifications;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "plant_id")
     private Plant plant;
 
@@ -182,5 +192,18 @@ public class PlantPost implements Serializable {
 
     public void setSpecifications(Set<Specification> specifications) {
         this.specifications = specifications;
+    }
+
+    public String getPhoto_id() {
+        return photo.getId();
+    }
+
+    public void setPhoto_id(String photo_id) {
+        this.photo_id = photo_id;
+    }
+
+    public void addSpecification(Specification specification){
+        specifications.add(specification);
+        specification.setPlantPost(this);
     }
 }

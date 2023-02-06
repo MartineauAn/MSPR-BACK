@@ -1,5 +1,8 @@
 package fr.epsi.b33.MSPR.bo;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import net.minidev.json.annotate.JsonIgnore;
+
 import javax.management.relation.Role;
 import javax.persistence.*;
 import java.io.Serializable;
@@ -18,13 +21,17 @@ public class User implements Serializable {
     @Column
     private String firstname;
     @Column(unique = true)
+    @JsonIgnore
+    @JsonProperty(value = "email", access = JsonProperty.Access.WRITE_ONLY)
     private String email;
     @Column
+    @JsonProperty(value = "password", access = JsonProperty.Access.WRITE_ONLY)
     private String password;
     @Column
+    @JsonProperty(value = "type_user", access = JsonProperty.Access.READ_ONLY)
     private String type_user;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<PlantPost> plantPosts;
 
     public User() {

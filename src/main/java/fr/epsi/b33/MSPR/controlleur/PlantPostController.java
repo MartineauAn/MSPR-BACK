@@ -1,13 +1,11 @@
 package fr.epsi.b33.MSPR.controlleur;
 
-import fr.epsi.b33.MSPR.bo.Asset;
-import fr.epsi.b33.MSPR.bo.Plant;
-import fr.epsi.b33.MSPR.bo.PlantPost;
-import fr.epsi.b33.MSPR.bo.User;
+import fr.epsi.b33.MSPR.bo.*;
 import fr.epsi.b33.MSPR.dal.PlantDAO;
 import fr.epsi.b33.MSPR.dal.UserDAO;
 import fr.epsi.b33.MSPR.dto.MessageResponse;
 import fr.epsi.b33.MSPR.repo.PlantPostRepository;
+import fr.epsi.b33.MSPR.repo.SpecificationRepository;
 import fr.epsi.b33.MSPR.service.AssetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -19,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -38,9 +37,12 @@ public class PlantPostController {
     @Autowired
     private PlantPostRepository plantPostRepository;
 
+    @Autowired
+    private SpecificationRepository specificationRepository;
+
     @GetMapping("/api/planPosts")
-    public List<PlantPost> all(){
-        return  plantPostRepository.findAll();
+    public ResponseEntity<Collection<PlantPost>> all(){
+        return  new ResponseEntity<>(plantPostRepository.findAll(), HttpStatus.OK);
     }
 
     @GetMapping("/api/planPosts/{planPost_id}")
@@ -108,6 +110,44 @@ public class PlantPostController {
         return ResponseEntity.ok()
                 .header( HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + photo.getFileName() + "\"" )
                 .body( photo.getContent() );
+    }
+
+    @PostMapping(value = "/api/planPosts/{plantpost_id}/specification", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+    public ResponseEntity<?> createSpecification(@PathVariable Integer plantpost_id,
+                                                 @RequestPart String title,
+                                                 @RequestPart String content){
+
+        String message;
+
+        try {
+            Optional<PlantPost> plantPost = plantPostRepository.findById(plantpost_id);
+
+            if (plantPost.isPresent()) {
+
+                PlantPost plantPostValue = plantPost.get();
+
+                Specification specification = new Specification(title, content);
+
+                plantPostValue.addSpecification(specification);
+
+                plantPostRepository.save(plantPostValue);
+
+                message = "success";
+
+                return ResponseEntity.status(HttpStatus.ACCEPTED).body(new MessageResponse(message));
+
+            }
+            else {
+                message = "Unable to find plantpost with id (" + plantpost_id + ")";
+            }
+
+            return ResponseEntity.status( HttpStatus.EXPECTATION_FAILED ).body( new MessageResponse( message ) );
+
+        } catch ( Exception e ) {
+            message = "An error as occured, please try again !";
+            return ResponseEntity.status( HttpStatus.EXPECTATION_FAILED ).body( new MessageResponse( message ) );
+        }
+
     }
 
 }

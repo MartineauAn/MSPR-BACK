@@ -4,6 +4,6 @@ import fr.epsi.b33.MSPR.bo.Plant;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
-@RepositoryRestResource(path = "plants", collectionResourceRel = "plants")
+@RepositoryRestResource(path = "plants", collectionResourceRel = "plants", exported = false)
 public interface PlantDAO extends CrudRepository<Plant, Integer> {
 }

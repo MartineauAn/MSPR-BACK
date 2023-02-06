@@ -12,12 +12,6 @@ import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 @Configuration
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        // TODO Auto-generated method stub
-        http.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
-        // your code
-    }
     @Bean
     public InMemoryUserDetailsManager userDetailsService() {
         UserDetails user = User.withDefaultPasswordEncoder()
@@ -31,5 +25,17 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .roles( "USER", "ADMIN" )
                 .build();
         return new InMemoryUserDetailsManager( user, admin );
+    }
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http
+                .authorizeRequests()
+                .anyRequest()
+                .authenticated()
+                .and()
+                .httpBasic();
+
+        http.csrf().disable();
     }
 }

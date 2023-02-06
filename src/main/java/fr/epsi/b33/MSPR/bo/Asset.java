@@ -1,6 +1,7 @@
 package fr.epsi.b33.MSPR.bo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -12,6 +13,7 @@ public class Asset implements Serializable {
     @Id
     @GeneratedValue( generator = "uuid" )
     @GenericGenerator( name = "uuid", strategy = "uuid2" )
+    @JsonProperty("id")
     private String id;
     @Column( name = "name" )
     private String fileName;
