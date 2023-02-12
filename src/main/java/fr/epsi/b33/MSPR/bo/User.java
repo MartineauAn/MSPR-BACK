@@ -1,5 +1,6 @@
 package fr.epsi.b33.MSPR.bo;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import net.minidev.json.annotate.JsonIgnore;
 
@@ -21,7 +22,6 @@ public class User implements Serializable {
     @Column
     private String firstname;
     @Column(unique = true)
-    @JsonIgnore
     @JsonProperty(value = "email", access = JsonProperty.Access.WRITE_ONLY)
     private String email;
     @Column
@@ -31,7 +31,8 @@ public class User implements Serializable {
     @JsonProperty(value = "type_user", access = JsonProperty.Access.READ_ONLY)
     private String type_user;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
+    @OneToMany(mappedBy = "user")
     private Set<PlantPost> plantPosts;
 
     public User() {

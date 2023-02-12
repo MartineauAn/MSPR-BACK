@@ -22,6 +22,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 public class PlantPostController {
 
@@ -104,7 +105,7 @@ public class PlantPostController {
         }
     }
 
-    @GetMapping("/api/plantPosts/photos/{photo_uuid}")
+    @GetMapping(value = "/api/plantPosts/photos/{photo_uuid}",produces = MediaType.IMAGE_JPEG_VALUE)
     public ResponseEntity<byte[]> getPhoto (@PathVariable String photo_uuid){
         Asset photo = assetService.getPhoto( photo_uuid );
         return ResponseEntity.ok()

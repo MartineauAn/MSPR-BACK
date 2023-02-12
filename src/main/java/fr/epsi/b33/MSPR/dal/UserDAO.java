@@ -8,7 +8,7 @@ import org.springframework.data.rest.core.annotation.RestResource;
 
 import java.util.List;
 
-@RepositoryRestResource(path = "users", collectionResourceRel = "users", exported = false)
+@RepositoryRestResource(path = "users", collectionResourceRel = "users",exported = false)
 public interface UserDAO extends CrudRepository<User, Integer> {
 
 }

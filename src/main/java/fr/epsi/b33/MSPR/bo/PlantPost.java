@@ -1,5 +1,6 @@
 package fr.epsi.b33.MSPR.bo;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
 
@@ -31,9 +32,6 @@ public class PlantPost implements Serializable {
     @JoinColumn(name = "photo_id")
     private Asset photo;
 
-    @Transient
-    private String photo_id;
-
     @Column(nullable = false)
     private String title;
 
@@ -52,7 +50,8 @@ public class PlantPost implements Serializable {
     @Column
     private String post_code;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @JsonBackReference
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
@@ -62,7 +61,8 @@ public class PlantPost implements Serializable {
     @OneToMany(mappedBy = "plantPost",cascade = CascadeType.ALL)
     private Set<Specification> specifications;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @JsonBackReference
+    @ManyToOne
     @JoinColumn(name = "plant_id")
     private Plant plant;
 
@@ -192,14 +192,6 @@ public class PlantPost implements Serializable {
 
     public void setSpecifications(Set<Specification> specifications) {
         this.specifications = specifications;
-    }
-
-    public String getPhoto_id() {
-        return photo.getId();
-    }
-
-    public void setPhoto_id(String photo_id) {
-        this.photo_id = photo_id;
     }
 
     public void addSpecification(Specification specification){

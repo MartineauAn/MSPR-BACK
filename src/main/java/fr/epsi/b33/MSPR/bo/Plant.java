@@ -1,5 +1,7 @@
 package fr.epsi.b33.MSPR.bo;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Blob;
@@ -29,7 +31,8 @@ public class Plant implements Serializable {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "plant", fetch = FetchType.LAZY)
+    @JsonManagedReference
+    @OneToMany(mappedBy = "plant")
     private Set<PlantPost> plantPosts;
 
     public Plant() {
