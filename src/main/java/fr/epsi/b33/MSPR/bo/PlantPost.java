@@ -50,13 +50,13 @@ public class PlantPost implements Serializable {
     @Column
     private String post_code;
 
+    @Transient
+    private String photo_id;
+
     @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-
-    @Transient
-    private String username;
 
     @OneToMany(mappedBy = "plantPost",cascade = CascadeType.ALL)
     private Set<Specification> specifications;
@@ -192,6 +192,11 @@ public class PlantPost implements Serializable {
 
     public void setSpecifications(Set<Specification> specifications) {
         this.specifications = specifications;
+    }
+
+
+    public String getPhoto_id() {
+        return this.getPhoto().getId();
     }
 
     public void addSpecification(Specification specification){
