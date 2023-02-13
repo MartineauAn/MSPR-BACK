@@ -1,5 +1,7 @@
 package fr.epsi.b33.MSPR.bo;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Set;
@@ -19,6 +21,7 @@ public class Specification implements Serializable {
 
     @JoinColumn(name = "id_plant_post")
     @ManyToOne
+    @JsonBackReference
     private PlantPost plantPost;
 
     public Specification() {

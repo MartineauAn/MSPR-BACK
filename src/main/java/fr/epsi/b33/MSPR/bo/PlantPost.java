@@ -1,6 +1,7 @@
 package fr.epsi.b33.MSPR.bo;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
 
@@ -58,6 +59,7 @@ public class PlantPost implements Serializable {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "plantPost",cascade = CascadeType.ALL)
     private Set<Specification> specifications;
 
